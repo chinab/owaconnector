@@ -3,5 +3,9 @@
 	<version>1</version>
 	<pluginVersion><![CDATA[2.3.0.200912170948-RELEASE]]></pluginVersion>
 	<configs>
+		<config>
+			<file>src/main/webapp/WEB-INF/configuration/overview/overview-flow.xml</file>
+			<name><![CDATA[overview-flow]]></name>
+		</config>
 	</configs>
 </webflow-project-description>

@@ -9,7 +9,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.owaconnector.model.User;
-import com.owaconnector.server.controller.OwaConnectorController;
+import com.owaconnector.server.controller.CalendarController;
 import com.owaconnector.server.service.PasswordService;
 import com.owaconnector.server.service.UserService;
 import com.owaconnector.test.ImplTestCase;
@@ -23,7 +23,7 @@ public class TestIntegrationUserConfigEncryption extends ImplTestCase {
 	private PasswordService passwordService;
 
 	@Autowired
-	private OwaConnectorController owaConnectorController;
+	private CalendarController owaConnectorController;
 
 	public void testCalendarControllerWithUser() throws Exception, Throwable {
 		String username = "username";
@@ -37,7 +37,7 @@ public class TestIntegrationUserConfigEncryption extends ImplTestCase {
 
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addParameter("key", privateKey);
-		ModelAndView modelAndView = owaConnectorController.get(request, null);
+		ModelAndView modelAndView = owaConnectorController.handleRequest(request, null);
 		expectNullModel(modelAndView);
 
 	}
