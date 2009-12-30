@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<view-state id="overview" view="configuration/overview">
+		<transition on="addConfiguration" to="calendarConfigurationAdd" />
+		<transition on="editConfiguration" to="calendarConfigurationEdit" />
+		<transition on="deleteConfiguration" to="calendarConfigurationDelete" />
+
+	</view-state>
+
+	<view-state id="calendarConfigurationAdd" view="configuration/edit">
+		<transition on="submit" to="done" />
+	</view-state>
+
+	<view-state id="calendarConfigurationEdit" view="configuration/edit">
+		<transition on="submit" to="done" />
+	</view-state>
+
+	<view-state id="calendarConfigurationDelete" view="configuration/delete">
+		<transition on="submit" to="done" />
+	</view-state>
+	
+	<end-state id="done"  
+         view="externalRedirect:contextRelative:/"/>  
+
+
+</flow>
