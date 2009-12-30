@@ -72,14 +72,6 @@ public final class DavGatewayHttpClientFacade {
 
 	static final long ONE_MINUTE = 60000;
 
-	// private static final String USER_AGENT = "httpclient.useragent";
-
-	// private static HttpParams params = new BasicHttpParams();
-	// private static SchemeRegistry schemeRegistry = new SchemeRegistry();
-	// private static ThreadSafeClientConnManager
-	// multiThreadedHttpConnectionManager = new
-	// ThreadSafeClientConnManager(params, schemeRegistry);
-
 	private DavGatewayHttpClientFacade() {
 	}
 
@@ -109,7 +101,6 @@ public final class DavGatewayHttpClientFacade {
 
 		DefaultHttpClient httpClient = new DefaultHttpClient(cm, params);
 
-		// configureClient(httpClient);
 		return httpClient;
 	}
 
@@ -130,36 +121,13 @@ public final class DavGatewayHttpClientFacade {
 			String password) throws DavMailException {
 		DefaultHttpClient httpClient = getInstance();
 		CredentialsProvider credsProvider = new BasicCredentialsProvider();
-		//
-		// httpClient.getParams().setParameter(USER_AGENT, IE_USER_AGENT);
-		// httpClient.getParams().setParameter(ClientPNames.MAX_REDIRECTS,
-		// MAX_REDIRECTS);
 
 		AuthScope authScope = new AuthScope(null, -1);
 		credsProvider.setCredentials(authScope,
 				new UsernamePasswordCredentials(userName, password));
 
-		// configureClient(httpClient);
 		return httpClient;
 	}
-
-	/**
-	 * Update http client configuration (proxy)
-	 * 
-	 * @param httpClient
-	 *            current Http client
-	 */
-	// public static void configureClient(DefaultHttpClient httpClient) {
-	//		
-	//
-	// // ArrayList<String> authPrefs = new ArrayList<String>();
-	// // authPrefs.add(AuthPolicy.DIGEST);
-	// // authPrefs.add(AuthPolicy.BASIC);
-	// // // exclude NTLM authentication scheme
-	// // httpClient.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY,
-	// // authPrefs);
-	//
-	// }
 
 	/**
 	 * Get Http Status code for the given URL
@@ -215,7 +183,6 @@ public final class DavGatewayHttpClientFacade {
 			DefaultHttpClient httpClient, String url) throws IOException {
 		HttpRequestBase method = new HttpGet(url);
 		HttpClientParams.setRedirecting(method.getParams(), false);
-		// method.setFollowRedirects(false);
 		return executeFollowRedirects(httpClient, method);
 	}
 
@@ -290,10 +257,6 @@ public final class DavGatewayHttpClientFacade {
 			public String getName() {
 				return "SEARCH";
 			}
-
-			// protected boolean isSuccess(int statusCode) {
-			// return statusCode == 207;
-			// }
 
 			@Override
 			public String getMethod() {
@@ -411,7 +374,7 @@ public final class DavGatewayHttpClientFacade {
 		return httpClient.execute(method);
 
 	}
-
+	// TODO Is this correct?
 	private static boolean hasNTLM(HttpClient httpClient) {
 		// Object authPrefs = httpClient.getParams().getParameter(
 		// AuthPolicy.AUTH_SCHEME_PRIORITY);
