@@ -8,14 +8,14 @@
 		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 
-	<context:component-scan base-package="com.owaconnector.server" />
-	<context:component-scan base-package="com.owaconnector.dao" />
-	<context:component-scan base-package="com.owaconnector.dao.hibernate" />
-	<context:component-scan base-package="com.owaconnector.client" />	 
-
 	<import resource="webmvc-config.xml" />
 	<import resource="webflow-config.xml" />
 	<import resource="datasource-config.xml" />
+	
+	<context:component-scan base-package="com.owaconnector.server" />
+	<context:component-scan base-package="com.owaconnector.dao" />
+	<context:component-scan base-package="com.owaconnector.client" />	 
+
 
 
 

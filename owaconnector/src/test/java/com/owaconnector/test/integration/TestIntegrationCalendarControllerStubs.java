@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.owaconnector.model.CalendarConfiguration;
 import com.owaconnector.model.User;
-import com.owaconnector.server.controller.OwaConnectorController;
+import com.owaconnector.server.controller.CalendarController;
 import com.owaconnector.server.service.ConfigurationService;
 import com.owaconnector.server.service.PasswordService;
 import com.owaconnector.server.service.UserService;
@@ -22,7 +22,7 @@ import com.owaconnector.test.StubTestCase;
 
 public class TestIntegrationCalendarControllerStubs extends StubTestCase {
 	@Autowired
-	private OwaConnectorController owaConnectorController;
+	private CalendarController owaConnectorController;
 
 	@Autowired
 	private ConfigurationService configurationService;
@@ -51,7 +51,7 @@ public class TestIntegrationCalendarControllerStubs extends StubTestCase {
 		request.addParameter("key", privateKeyAsString);
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		ModelAndView modelAndView = owaConnectorController.get(request, response);
+		ModelAndView modelAndView = owaConnectorController.handleRequest(request, response);
 		expectModel(modelAndView);
 	}
 
@@ -69,7 +69,7 @@ public class TestIntegrationCalendarControllerStubs extends StubTestCase {
 		request.addParameter("token", "asdf");
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		ModelAndView modelAndView = owaConnectorController.get(request, response);
+		ModelAndView modelAndView = owaConnectorController.handleRequest(request, response);
 		expectNullModel(modelAndView);
 		
 	}
@@ -87,19 +87,19 @@ public class TestIntegrationCalendarControllerStubs extends StubTestCase {
 		request.addParameter("key", "asdf");
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		ModelAndView modelAndView = owaConnectorController.get(request, response);
+		ModelAndView modelAndView = owaConnectorController.handleRequest(request, response);
 		expectNullModel(modelAndView);
 	}
 	public void testCalendarControllerNoGetRequest() throws Exception{
 		MockHttpServletResponse response = new MockHttpServletResponse();
 
-		ModelAndView modelAndView = owaConnectorController.get(null, response);
+		ModelAndView modelAndView = owaConnectorController.handleRequest(null, response);
 		expectNullModel(modelAndView);
 	}
 	public void testCalendarControllerNoResponseObj() throws Exception{
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addParameter("key", "asdf");
-		ModelAndView modelAndView = owaConnectorController.get(request,null);
+		ModelAndView modelAndView = owaConnectorController.handleRequest(request,null);
 		expectNullModel(modelAndView);
 	}
 	
