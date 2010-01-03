@@ -1,0 +1,49 @@
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <script type="text/javascript">dojo.require('dijit.TitlePane');</script>
+    <div id="_title_div">
+        <spring:message code="label.calendarconfiguration" var="entity_label"/>
+        <spring:message arguments="${entity_label}" code="entity.show" var="title_msg"/>
+        <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
+        <c:if test="${not empty calendarConfiguration}">
+            <div id="roo_calendarConfiguration_username">
+                <label for="_username_id">Username:</label>
+                <div class="box" id="_username_id">${calendarConfiguration.username}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_domainName">
+                <label for="_domainName_id">Domain Name:</label>
+                <div class="box" id="_domainName_id">${calendarConfiguration.domainName}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_passwordEncrypted">
+                <label for="_passwordEncrypted_id">Password Encrypted:</label>
+                <div class="box" id="_passwordEncrypted_id">${calendarConfiguration.passwordEncrypted}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_URL">
+                <label for="_URL_id">U R L:</label>
+                <div class="box" id="_URL_id">${calendarConfiguration.URL}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_maxDaysInPast">
+                <label for="_maxDaysInPast_id">Max Days In Past:</label>
+                <div class="box" id="_maxDaysInPast_id">${calendarConfiguration.maxDaysInPast}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_token">
+                <label for="_token_id">Token:</label>
+                <div class="box" id="_token_id">${calendarConfiguration.token}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_owner">
+                <label for="_owner_id">Owner:</label>
+                <div class="box" id="_owner_id">${calendarConfiguration.owner}</div>
+            </div>
+            <br/>
+        </c:if>
+        <c:if test="${empty calendarConfiguration}">
+            <spring:message arguments="${entity_label}" code="entity.not.found.single"/>
+        </c:if>
+    </div>
+</div>

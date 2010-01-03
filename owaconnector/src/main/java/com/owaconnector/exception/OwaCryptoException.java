@@ -5,7 +5,6 @@ import org.bouncycastle.crypto.CryptoException;
 public class OwaCryptoException extends CryptoException{
 
 	public OwaCryptoException(String message, Exception e) {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

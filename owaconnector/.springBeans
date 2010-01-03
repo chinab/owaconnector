@@ -5,12 +5,8 @@
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
-	<enableImports><![CDATA[true]]></enableImports>
+	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
-		<config>src/main/webapp/WEB-INF/config/webflow-config.xml</config>
-		<config>src/main/webapp/WEB-INF/config/datasource-config.xml</config>
-		<config>src/main/webapp/WEB-INF/config/web-application-config.xml</config>
-		<config>src/main/webapp/WEB-INF/config/webmvc-config.xml</config>
 	</configs>
 	<configSets>
 	</configSets>
