@@ -80,16 +80,4 @@ privileged aspect CalendarConfigurationController_Roo_Controller {
         return "redirect:/calendarconfiguration?page=" + ((page == null) ? "1" : page.toString()) + "&size=" + ((size == null) ? "10" : size.toString());        
     }    
     
-    @RequestMapping(value = "find/ByTokenEquals/form", method = RequestMethod.GET)    
-    public String CalendarConfigurationController.findCalendarConfigurationsByTokenEqualsForm(ModelMap modelMap) {    
-        return "calendarconfiguration/findCalendarConfigurationsByTokenEquals";        
-    }    
-    
-    @RequestMapping(value = "find/ByTokenEquals", method = RequestMethod.GET)    
-    public String CalendarConfigurationController.findCalendarConfigurationsByTokenEquals(@RequestParam("token") String token, ModelMap modelMap) {    
-        if (token == null || token.length() == 0) throw new IllegalArgumentException("A Token is required.");        
-        modelMap.addAttribute("calendarconfigurations", CalendarConfiguration.findCalendarConfigurationsByTokenEquals(token).getResultList());        
-        return "calendarconfiguration/list";        
-    }    
-    
 }

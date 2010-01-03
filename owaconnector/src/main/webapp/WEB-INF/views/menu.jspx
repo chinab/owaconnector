@@ -46,41 +46,7 @@
                 </li>
             
             
-            <li id="finder_findcalendarconfigurationsbytokenequals_menu_item">
-                    <spring:url value="/calendarconfiguration/find/ByTokenEquals/form" var="finder_findcalendarconfigurationsbytokenequals_menu_item_url"/>
-                    <a href="${finder_findcalendarconfigurationsbytokenequals_menu_item_url}">
-                        <spring:message code="label.tokenequals" var="label_tokenequals"/>
-                        <spring:message arguments="${label_tokenequals}" code="global.menu.find"/>
-                    </a>
-                </li>
-            </ul>
-        </li>
-    <li id="selenium_category">
-            <h2>
-                <spring:message code="menu.category.selenium_category.label"/>
-            </h2>
-            <ul>
-                <li id="selenium_test_suite_menu_item">
-                    <spring:url value="/static/selenium/test-suite.xhtml" var="selenium_test_suite_menu_item_url"/>
-                    <a href="${selenium_test_suite_menu_item_url}">
-                        <spring:message code="label.test" var="label_test"/>
-                        <spring:message arguments="${label_test}" code="selenium.menu.test.suite"/>
-                    </a>
-                </li>
-            </ul>
-        </li>
-    <li id="web_mvc_jsp_manual_controller_category">
-            <h2>
-                <spring:message code="menu.category.web_mvc_jsp_manual_controller_category.label"/>
-            </h2>
-            <ul>
-                <li id="web_mvc_jsp_list_calendar_menu_item">
-                    <spring:url value="/calendar/index" var="web_mvc_jsp_list_calendar_menu_item_url"/>
-                    <a href="${web_mvc_jsp_list_calendar_menu_item_url}">
-                        <spring:message code="label.calendarcontroller" var="label_calendarcontroller"/>
-                        <spring:message arguments="${label_calendarcontroller}" code="label.calendar"/>
-                    </a>
-                </li>
+            
             </ul>
         </li>
     </ul>
