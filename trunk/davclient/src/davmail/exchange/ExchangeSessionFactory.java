@@ -23,15 +23,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.params.HttpClientParams;
-
 import davmail.BundleMessage;
 import davmail.exception.DavMailException;
-import davmail.http.DavGatewayHttpClientFacade;
 
 /**
  * Create ExchangeSession instances.
@@ -153,39 +146,7 @@ public final class ExchangeSessionFactory {
         return session;
     }
 
-    /**
-     * Send a request to Exchange server to check current settings.
-     *
-     * @throws IOException if unable to access Exchange server
-     * @throws DavMailException 
-     */
-    public static void checkConfig() throws IOException, DavMailException {
-        String url = "https://owa.everest.nl/exchange/";
-        HttpClient httpClient = DavGatewayHttpClientFacade.getInstance();
-        HttpGet testMethod = new HttpGet(url);
-        try {
-            // get webmail root url (will not follow redirects)
-        	HttpClientParams.setRedirecting(testMethod.getParams(), false);
-        	HttpClientParams.setAuthenticating(testMethod.getParams(), false);
-            HttpResponse response = httpClient.execute(testMethod);
-            int status = response.getStatusLine().getStatusCode();
-            ExchangeSession.LOGGER.debug("Test configuration status: " + status);
-            if (status != HttpStatus.SC_OK && status != HttpStatus.SC_UNAUTHORIZED
-                    && status != HttpStatus.SC_MOVED_TEMPORARILY && status != HttpStatus.SC_MOVED_PERMANENTLY) {
-                throw new DavMailException("EXCEPTION_CONNECTION_FAILED", url, status);
-            }
-            // session opened, future failure will mean network down
-            configChecked = true;
-            // Reset so next time an problem occurs message will be sent once
-            errorSent = false;
-        } catch (Exception exc) {
-            handleNetworkDown(exc);
-//        } finally {
-//            testMethod.releaseConnection();
-        }
-
-    }
-
+  
     private static void handleNetworkDown(Exception exc) throws DavMailException {
         if (configChecked) {
             ExchangeSession.LOGGER.warn(BundleMessage.formatLog("EXCEPTION_NETWORK_DOWN"));
@@ -205,29 +166,6 @@ public final class ExchangeSessionFactory {
         }
     }
 
-    /**
-     * Check if at least one network interface is up and active (i.e. has an address)
-     *
-     * @return true if network available
-//     */
-//    static boolean checkNetwork() {
-//        boolean up = false;
-//        Enumeration<NetworkInterface> enumeration;
-//        try {
-//            enumeration = NetworkInterface.getNetworkInterfaces();
-//            while (!up && enumeration.hasMoreElements()) {
-//                NetworkInterface networkInterface = enumeration.nextElement();
-//                up = networkInterface.isUp() && !networkInterface.isLoopback()
-//                        && networkInterface.getInetAddresses().hasMoreElements();
-//            }
-//        } catch (NoSuchMethodError error) {
-//            ExchangeSession.LOGGER.debug("Unable to test network interfaces (not available under Java 1.5)");
-//            up = true;
-//        } catch (SocketException exc) {
-//            ExchangeSession.LOGGER.error("DavMail configuration exception: \n Error listing network interfaces " + exc.getMessage(), exc);
-//        }
-//        return up;
-//    }
 
     /**
      * Reset config check status and clear session pool.
