@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.http.HttpException;
+import org.junit.Assert;
 import org.springframework.stereotype.Service;
 
 import com.owaconnector.domain.CalendarConfiguration;
@@ -17,19 +18,20 @@ import davmail.util.StringUtil;
 
 @Service
 public class CalendarServiceImpl implements CalendarService {
-	
+
 	public StringBuilder getCalendar(CalendarConfiguration config,
 			String decryptedPassword) {
-		if (config == null || decryptedPassword == null)
-			throw new IllegalStateException();
-		
+		Assert.assertNotNull("CalendarConfiguration cannot be null", config);
+		Assert.assertNotNull("Password cannot be null", decryptedPassword);
+
 		StringBuilder calendar = null;
 
 		try {
 			List<ExchangeSession.Event> events = getEvents(config,
 					decryptedPassword);
-			calendar = createCalendar(events);
-
+			if (events != null && events.size() > 0) {
+				calendar = createCalendar(events);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,21 +43,26 @@ public class CalendarServiceImpl implements CalendarService {
 			e.printStackTrace();
 		}
 		return calendar;
-	
+
 	}
 
 	private List<ExchangeSession.Event> getEvents(CalendarConfiguration config,
 			String decryptedPassword) throws IOException, DavMailException,
 			URISyntaxException, HttpException {
-		String username = config.getDomainName()+ "\\" +config.getUsername();
+		Assert.assertNotNull("CalendarConfiguration cannot be null", config);
+		Assert.assertNotNull("Password cannot be null", decryptedPassword);
+
+		String username = config.getDomainName() + "\\" + config.getUsername();
 		ExchangeSession session = ExchangeSessionFactory.getInstance(config
-				.getURL(), config.getUsername(), decryptedPassword);
+				.getURL(), username, decryptedPassword);
 		String folderPath = session.getFolderPath("CALENDAR");
-		return session.getAllEvents(folderPath,config.getMaxDaysInPast());
+		return session.getAllEvents(folderPath, config.getMaxDaysInPast());
 	}
 
 	private StringBuilder createCalendar(List<ExchangeSession.Event> events)
 			throws IOException, HttpException {
+		Assert.assertNotNull("Events cannot be null", events);
+
 		StringBuilder buffer = new StringBuilder();
 		buffer.append("BEGIN:VCALENDAR");
 		for (ExchangeSession.Event event : events) {
