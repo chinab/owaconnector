@@ -585,8 +585,7 @@ public class WebdavRequestImpl implements WebdavRequest, DavConstants {
 	}
 
 	public int getRemotePort() {
-		// TODO Auto-generated method stub
-		return 0;
+		return httpRequest.getRemotePort();
 	}
 
 	public String getRemoteUser() {
