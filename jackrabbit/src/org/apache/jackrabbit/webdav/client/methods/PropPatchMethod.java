@@ -220,20 +220,20 @@ public class PropPatchMethod extends DavMethodBase implements DavConstants {
 	 * @throws IOException
 	 * @see DavMethod#getResponseException()
 	 */
-	public DavException getResponseException() throws IOException {
-		// //checkUsed();
-		// if (getSuccess()) {
-		// String msg = "Cannot retrieve exception from successful response.";
-		// log.warn(msg);
-		// throw new IllegalStateException(msg);
-		// }
-		// if (responseException != null) {
-		// return responseException;
-		// } else {
-		// return super.getResponseException();
-		// }
-		return null;
-	}
+//	public DavException getResponseException() throws IOException {
+//		// //checkUsed();
+//		// if (getSuccess()) {
+//		// String msg = "Cannot retrieve exception from successful response.";
+//		// log.warn(msg);
+//		// throw new IllegalStateException(msg);
+//		// }
+//		// if (responseException != null) {
+//		// return responseException;
+//		// } else {
+//		// return super.getResponseException();
+//		// }
+//		return null;
+//	}
 
 	// ------------------------------------------------------< DavMethodBase
 	// >---
