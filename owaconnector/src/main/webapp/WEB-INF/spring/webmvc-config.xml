@@ -40,12 +40,12 @@
 	<!--
 		These should be enabled, but generate build errors, see STS-723
 	-->
-	<!--
-		<mvc:view-controller path="/login" /> <mvc:view-controller
-		path="/index" /> <mvc:view-controller path="/uncaughtException" />
-		<mvc:view-controller path="/resourceNotFound" /> <mvc:view-controller
-		path="/dataAccessFailure" />
-	-->
+	<mvc:view-controller path="/login" />
+	<mvc:view-controller path="/index" />
+	<mvc:view-controller path="/uncaughtException" />
+	<mvc:view-controller path="/resourceNotFound" />
+	<mvc:view-controller path="/dataAccessFailure" />
+
 	<!--
 		Resolves logical view names returned by Controllers to Tiles; a view
 		name to resolve is treated as the name of a tiles definition
