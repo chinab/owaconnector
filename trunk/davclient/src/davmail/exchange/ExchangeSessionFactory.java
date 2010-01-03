@@ -108,7 +108,7 @@ public final class ExchangeSessionFactory {
             errorSent = false;
         
         } catch (Exception exc) {
-        	exc.printStackTrace();
+        	//exc.printStackTrace();
             handleException(exc);
         }
         return session;

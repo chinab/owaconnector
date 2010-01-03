@@ -1714,7 +1714,7 @@ public class ExchangeSession {
 			}
 
 			dumpIndex++;
-			
+
 			// Convert event class from and to iCal
 			// See
 			// https://trac.calendarserver.org/browser/CalendarServer/trunk/doc/Extensions/caldav-privateevents.txt
@@ -1997,10 +1997,8 @@ public class ExchangeSession {
 				reader.close();
 			}
 
-
 			return result.toString();
 		}
-
 
 		protected String getICSValue(String icsBody, String prefix,
 				String defval) throws IOException {
@@ -2160,13 +2158,16 @@ public class ExchangeSession {
 	 * @param folderPath
 	 *            Exchange folder path
 	 * @return list of calendar events
+	 * @throws HttpException
+	 * @throws URISyntaxException
+	 * @throws IOException
 	 * @throws IOException
 	 *             on error
 	 * @throws URISyntaxException
 	 * @throws HttpException
 	 */
-	public List<Event> getAllEvents(String folderPath, int caldavPastDelay) throws IOException,
-			URISyntaxException, HttpException {
+	public List<Event> getAllEvents(String folderPath, int caldavPastDelay)
+			throws IOException, URISyntaxException, HttpException {
 		String dateCondition = "";
 		if (caldavPastDelay != Integer.MAX_VALUE) {
 			Calendar cal = Calendar.getInstance();
@@ -2209,7 +2210,8 @@ public class ExchangeSession {
 			throws IOException, URISyntaxException, HttpException {
 		List<Event> events = new ArrayList<Event>();
 		MultiStatusResponse[] responses = DavGatewayHttpClientFacade
-				.executeSearchMethod(httpClient, URIUtil.encodePath(folderPath), searchQuery);
+				.executeSearchMethod(httpClient,
+						URIUtil.encodePath(folderPath), searchQuery);
 		for (MultiStatusResponse response : responses) {
 			events.add(buildEvent(response));
 		}
@@ -2752,9 +2754,7 @@ public class ExchangeSession {
 		return results;
 	}
 
-
 	static final String DAV_UID_FILTER = "\"DAV:uid\"='";
-
 
 	/**
 	 * Get extended address book information for person with gallookup. Does not
