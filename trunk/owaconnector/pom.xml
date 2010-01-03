@@ -313,6 +313,7 @@
             <artifactId>org.springframework.security.taglibs</artifactId>
             <version>3.0.0.RC2</version>
         </dependency>
+  
     </dependencies>
 
 	<build>
