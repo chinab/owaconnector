@@ -2209,8 +2209,7 @@ public class ExchangeSession {
 			throws IOException, URISyntaxException, HttpException {
 		List<Event> events = new ArrayList<Event>();
 		MultiStatusResponse[] responses = DavGatewayHttpClientFacade
-				.executeSearchMethod(httpClient, getBaseUrl()
-						+ URIUtil.encodePath(folderPath), searchQuery);
+				.executeSearchMethod(httpClient, URIUtil.encodePath(folderPath), searchQuery);
 		for (MultiStatusResponse response : responses) {
 			events.add(buildEvent(response));
 		}
