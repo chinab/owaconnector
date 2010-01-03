@@ -109,7 +109,7 @@ public final class ExchangeSessionFactory {
         
         } catch (Exception exc) {
         	exc.printStackTrace();
-            handleNetworkDown(exc);
+            handleException(exc);
         }
         return session;
     }
@@ -141,17 +141,17 @@ public final class ExchangeSessionFactory {
             }
        
         } catch (Exception exc) {
-            handleNetworkDown(exc);
+            handleException(exc);
         }
         return session;
     }
 
   
-    private static void handleNetworkDown(Exception exc) throws DavMailException {
-        if (configChecked) {
-            ExchangeSession.LOGGER.warn(BundleMessage.formatLog("EXCEPTION_NETWORK_DOWN"));
-            throw new NetworkDownException("EXCEPTION_NETWORK_DOWN");
-        } else {
+    private static void handleException(Exception exc) throws DavMailException {
+//        if (configChecked) {
+//            ExchangeSession.LOGGER.warn(BundleMessage.formatLog("EXCEPTION_NETWORK_DOWN"));
+//            throw new NetworkDownException("EXCEPTION_NETWORK_DOWN");
+//        } else {
             BundleMessage message = new BundleMessage("EXCEPTION_CONNECT", exc.getClass().getName(), exc.getMessage());
             if (errorSent) {
                 ExchangeSession.LOGGER.warn(message);
@@ -163,7 +163,7 @@ public final class ExchangeSessionFactory {
                 ExchangeSession.LOGGER.error(message);
                 throw new DavMailException("EXCEPTION_DAVMAIL_CONFIGURATION", message);
             }
-        }
+//        }
     }
 
 
