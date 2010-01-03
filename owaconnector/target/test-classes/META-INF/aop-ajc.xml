@@ -1,0 +1,13 @@
+<aspectj>
+<aspects>
+<aspect name="com.owaconnector.domain.CalendarUserIntegrationTest_Roo_Configurable"/>
+<aspect name="com.owaconnector.domain.CalendarUserIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="com.owaconnector.domain.CalendarConfigurationDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.owaconnector.domain.CalendarUserDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="com.owaconnector.domain.CalendarUserDataOnDemand_Roo_Configurable"/>
+<aspect name="com.owaconnector.domain.CalendarConfigurationDataOnDemand_Roo_Configurable"/>
+<aspect name="com.owaconnector.domain.CalendarConfigurationIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="com.owaconnector.domain.CalendarConfigurationIntegrationTest_Roo_Configurable"/>
+</aspects>
+</aspectj>
+
