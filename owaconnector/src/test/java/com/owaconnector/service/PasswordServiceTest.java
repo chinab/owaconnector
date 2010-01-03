@@ -10,14 +10,12 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.staticmock.MockStaticEntityMethods;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.owaconnector.test.AbstractTestCase;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@MockStaticEntityMethods
-public class PasswordServiceTest extends AbstractTestCase {
+@ContextConfiguration
+public class PasswordServiceTest {
 
 	@Autowired
 	private PasswordService passwordService;
@@ -39,34 +37,35 @@ public class PasswordServiceTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void TestCryptorStringRepresentationOfPrivateKeySimple() throws Exception {
+	public void TestCryptorStringRepresentationOfPrivateKeySimple()
+			throws Exception {
 		String secretData = "String to Encrypt";
 		String decryptedPassword = encryptDecrypt(secretData);
 
 		boolean expected = java.util.Arrays.equals(secretData.getBytes(),
-				decryptedPassword.getBytes());	
+				decryptedPassword.getBytes());
 		Assert.assertTrue(expected);
-		Assert.assertEquals(secretData,decryptedPassword);
+		Assert.assertEquals(secretData, decryptedPassword);
 	}
+
 	@Test
-	public void TestCryptorStringRepresentationOfPrivateKeyComplex() throws Exception {
+	public void TestCryptorStringRepresentationOfPrivateKeyComplex()
+			throws Exception {
 		String secretData = "String to Encrypt!@#$%^&*()_+;.,></";
 		String decryptedPassword = encryptDecrypt(secretData);
 
 		boolean expected = java.util.Arrays.equals(secretData.getBytes(),
-				decryptedPassword.getBytes());	
+				decryptedPassword.getBytes());
 		Assert.assertTrue(expected);
-		Assert.assertEquals(secretData,decryptedPassword);
+		Assert.assertEquals(secretData, decryptedPassword);
 	}
 
-
-	
 	private String encryptDecrypt(String secretData)
 			throws NoSuchAlgorithmException, Exception, InvalidKeySpecException {
 		KeyPair keyPair = passwordService.generateKeys();
 
-		byte[] encryptedPassword = passwordService.encrypt(secretData.getBytes(), keyPair
-				.getPublic());
+		byte[] encryptedPassword = passwordService.encrypt(secretData
+				.getBytes(), keyPair.getPublic());
 		String privateKeyAsString = passwordService
 				.getStringRepresentation(keyPair.getPrivate());
 		PrivateKey newPrivateKey = passwordService
