@@ -8,6 +8,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 
+import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.UrlBase64;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,10 @@ import com.owaconnector.service.PasswordService;
 @Service
 public class PasswordServiceImpl implements PasswordService {
 
+	
+	private final static Logger LOG = Logger
+			.getLogger(PasswordServiceImpl.class);
+	
 	private static final String encoding = "RSA";
 	private final static String xform = "RSA/NONE/PKCS1PADDING";
 

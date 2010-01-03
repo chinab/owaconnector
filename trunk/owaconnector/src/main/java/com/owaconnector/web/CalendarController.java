@@ -6,7 +6,9 @@ import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.roo.addon.web.mvc.controller.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,54 +16,87 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.owaconnector.domain.CalendarConfiguration;
 import com.owaconnector.exception.NoCalendarFoundException;
-import com.owaconnector.exception.OwaCryptoException;
 import com.owaconnector.service.CalendarService;
-import com.owaconnector.service.ConfigurationService;
 import com.owaconnector.service.PasswordService;
 
 @RequestMapping("/calendar/**")
 @Controller
 public class CalendarController {
 
+	private final static Logger LOG = Logger
+			.getLogger(CalendarController.class);
+
 	@Autowired
 	private PasswordService passwordService;
 	@Autowired
 	private CalendarService calendarService;
-	@Autowired
-	private ConfigurationService configurationService;
 
 	@RequestMapping
 	public String getCalendar(@RequestParam("token") String token,
 			@RequestParam("key") String encryptionKey, ModelMap modelMap,
-			HttpServletRequest request, HttpServletResponse response) throws NoCalendarFoundException {
+			HttpServletRequest request, HttpServletResponse response)
+			throws NoCalendarFoundException {
 
 		try {
-
-			CalendarConfiguration result = configurationService.getConfigurationForToken(token);
+			if (LOG.isDebugEnabled()) {
+				StringBuilder msg = new StringBuilder();
+				msg.append("getCalendar: ");
+				msg.append("session: " + token + " ");
+				msg.append("encryptionKey: " + encryptionKey);
+				LOG.debug(msg.toString());
+			}
+			CalendarConfiguration result = (CalendarConfiguration) CalendarConfiguration
+					.findCalendarConfigurationsByTokenEquals(token)
+					.getSingleResult();
+			if (LOG.isDebugEnabled()) {
+				StringBuilder msg = new StringBuilder();
+				msg.append("getCalendar: ");
+				msg.append("session: " + token + " ");
+				msg.append("result: " + result.toString());
+				LOG.debug(msg.toString());
+			}
 			PrivateKey privateKey;
 
-			//privateKey = passwordService.constructPrivateKey(encryptionKey);
+			// privateKey = passwordService.constructPrivateKey(encryptionKey);
 
 			String password = result.getPasswordEncrypted();
-//			byte[] decrypt = passwordService.decrypt(password.getBytes(),
-//					privateKey);
+			// byte[] decrypt = passwordService.decrypt(password.getBytes(),
+			// privateKey);
 			String decryptedPassword = password;// new String(decrypt);
+			if(LOG.isDebugEnabled()) {
+				StringBuilder msg = new StringBuilder();
+				msg.append("getCalendar: ");
+				msg.append("session: " + token + " ");
+				msg.append("Password decryption succesfull");
+				LOG.debug(msg.toString());
+			}
 
 			StringBuilder calendar = calendarService.getCalendar(result,
 					decryptedPassword);
-			if (calendar.length() > 0) {
+			if (calendar != null && calendar.length() > 0) {
+				if(LOG.isDebugEnabled()) {
+					StringBuilder msg = new StringBuilder();
+					msg.append("getCalendar: ");
+					msg.append("session: " + token + " ");
+					msg.append("Calendar obtained from Exchange");
+					LOG.debug(msg.toString());
+				}
 
 				modelMap.addAttribute("calendar", calendar);
 				return "calendar/get";
 			}
-		} catch (OwaCryptoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (NoResultException e) {
-			throw new NoCalendarFoundException();
+			if(LOG.isDebugEnabled()) {
+				StringBuilder msg = new StringBuilder();
+				msg.append("getCalendar: ");
+				msg.append("session: " + token + " ");
+				msg.append("CalendarConfiguration not found for token ");
+				LOG.warn(msg);
+			}
+			throw new NoCalendarFoundException(e);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("getCalendar: ", e);
+			throw new NoCalendarFoundException(e);
 		}
 		return null;
 	}

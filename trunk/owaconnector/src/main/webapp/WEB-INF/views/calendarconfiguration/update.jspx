@@ -43,7 +43,7 @@
             <br/>
             <div id="roo_calendarConfiguration_uRL">
                 <label for="_URL_id">U R L:</label>
-                <form:input cssStyle="width:250px" id="_URL_id" maxlength="50" path="URL" size="0"/>
+                <form:input cssStyle="width:250px" id="_URL_id" maxlength="30" path="URL" size="0"/>
                 <br/>
                 <form:errors cssClass="errors" id="_URL_error_id" path="URL"/>
                 <spring:message arguments="U R L" code="field.invalid" var="field_invalid"/>
