@@ -8,7 +8,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 
-import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.UrlBase64;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,9 @@ import com.owaconnector.service.PasswordService;
 /**
  * The implementation of the passwordservice uses the Cryptor class to encrypt
  * and decrypt the password. It also converts PrivateKey objects to Strings so
- * it can be transferred using URL's. 
+ * it can be transferred using URL's.
  * 
- * In this implementation the Provider of the Cryptor can be supplied. 
+ * In this implementation the Provider of the Cryptor can be supplied.
  * 
  * @author b.walet
  * 
@@ -31,10 +30,9 @@ import com.owaconnector.service.PasswordService;
 @Service
 public class PasswordServiceImpl implements PasswordService {
 
-	
-	private final static Logger LOG = Logger
-			.getLogger(PasswordServiceImpl.class);
-	
+	// @com.owaconnector.logger.Logger
+	// private org.apache.log4j.Logger log;
+
 	private static final String encoding = "RSA";
 	private final static String xform = "RSA/NONE/PKCS1PADDING";
 
@@ -48,7 +46,8 @@ public class PasswordServiceImpl implements PasswordService {
 	public byte[] decrypt(byte[] hash, PrivateKey prvk)
 			throws OwaCryptoException {
 		try {
-			return Cryptor.decrypt(hash, prvk, xform, new BouncyCastleProvider());
+			return Cryptor.decrypt(hash, prvk, xform,
+					new BouncyCastleProvider());
 		} catch (Exception e) {
 			throw new OwaCryptoException(e.getMessage(), e);
 		}
@@ -64,7 +63,8 @@ public class PasswordServiceImpl implements PasswordService {
 	public byte[] encrypt(byte[] password, PublicKey publickey)
 			throws OwaCryptoException {
 		try {
-			return Cryptor.encrypt(password, publickey, xform, new BouncyCastleProvider());
+			return Cryptor.encrypt(password, publickey, xform,
+					new BouncyCastleProvider());
 		} catch (Exception e) {
 			throw new OwaCryptoException(e.getMessage(), e);
 		}
