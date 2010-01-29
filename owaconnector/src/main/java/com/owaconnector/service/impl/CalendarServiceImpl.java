@@ -5,8 +5,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.http.HttpException;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.owaconnector.domain.CalendarConfiguration;
 import com.owaconnector.exception.NoCalendarFoundException;
@@ -20,15 +20,13 @@ import davmail.util.StringUtil;
 @Service
 public class CalendarServiceImpl implements CalendarService {
 
-	private final static Logger LOG = Logger.getLogger(CalendarServiceImpl.class);
-
+	@com.owaconnector.logger.Logger 
+	private org.apache.log4j.Logger log;
+	
     public StringBuilder getCalendar(CalendarConfiguration config, String decryptedPassword) throws NoCalendarFoundException {
-        if (config == null) {
-            throw new IllegalArgumentException("CalendarConfiguration cannot be null");
-        }
-        if (decryptedPassword == null) {
-            throw new IllegalArgumentException("DecryptedPassword cannot be null");
-        }
+        Assert.notNull(config,"CalendarConfiguration cannot be null");
+        Assert.notNull(decryptedPassword,"DecryptedPassword cannot be null");
+        
         StringBuilder calendar = null;
         try {
             List<ExchangeSession.Event> events = getEvents(config, decryptedPassword);
@@ -36,12 +34,12 @@ public class CalendarServiceImpl implements CalendarService {
                 calendar = createCalendar(events);
             }
         } catch (IOException e) {
-        	LOG.error("Error in getCalendar: ",e);
+        	log.error("Error in getCalendar: ",e);
         	throw new NoCalendarFoundException(e);
         } catch (URISyntaxException e) {
             throw new NoCalendarFoundException(e);
         } catch (DavMailException e) {
-        	LOG.error("Error in getCalendar: ",e);
+        	log.error("Error in getCalendar: ",e);
         	throw new NoCalendarFoundException(e);
         } catch (HttpException e) {
             throw new NoCalendarFoundException(e);
