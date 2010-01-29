@@ -19,15 +19,15 @@
                 <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_identifier_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${field_validation}', invalidMessage: '${field_invalid}', required : true}})); </script>
             </div>
             <br/>
-            <div id="roo_calendarUser_name">
-                <label for="_name_id">Name:</label>
-                <form:input cssStyle="width:250px" id="_name_id" maxlength="30" path="name" size="0"/>
+            <div id="roo_calendarUser_username">
+                <label for="_username_id">Username:</label>
+                <form:input cssStyle="width:250px" id="_username_id" maxlength="30" path="username" size="0"/>
                 <br/>
-                <form:errors cssClass="errors" id="_name_error_id" path="name"/>
-                <spring:message arguments="Name" code="field.invalid" var="field_invalid"/>
+                <form:errors cssClass="errors" id="_username_error_id" path="username"/>
+                <spring:message arguments="Username" code="field.invalid" var="field_invalid"/>
                 <spring:message code="field.required" var="field_required"/>
-                <spring:message argumentSeparator="," arguments="Name,(${field_required})" code="field.simple.validation" var="field_validation"/>
-                <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_name_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${field_validation}', invalidMessage: '${field_invalid}', required : true}})); </script>
+                <spring:message argumentSeparator="," arguments="Username,(${field_required})" code="field.simple.validation" var="field_validation"/>
+                <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_username_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${field_validation}', invalidMessage: '${field_invalid}', required : true}})); </script>
             </div>
             <br/>
             <div class="submit" id="roo_calendarUser_submit">

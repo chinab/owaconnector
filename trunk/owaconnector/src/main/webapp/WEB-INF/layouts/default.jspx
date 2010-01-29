@@ -40,6 +40,7 @@
 		<script language="JavaScript" type="text/javascript">dojo.require("dojo.parser");</script>
 		<spring:message code="application.name" var="app_name"/>
 		<title><spring:message code="welcome.h3" arguments="${app_name}" /></title>
+		<meta name="google-site-verification" content="zImxAOkR3f1c9466xwxc75bcNeqEDABW46428xtNZcc" />
 	</head>
    	<body class="tundra spring">		
 	    <tiles:insertAttribute name="menu" ignore="true" />   

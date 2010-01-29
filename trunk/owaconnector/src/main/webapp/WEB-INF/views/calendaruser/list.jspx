@@ -12,8 +12,11 @@
                     <tr>
                         <th>Id</th>
                         <th>Identifier</th>
-                        <th>Name</th>
+                        <th>Username</th>
                         <th>Configurations</th>
+                        <th>Authorities</th>
+                        <th>Password</th>
+                        <th>Account Non Expired</th>
                         <th/>
                         <th/>
                         <th/>
@@ -23,8 +26,11 @@
                     <tr>
                         <td>${calendarUser.id}</td>
                         <td>${fn:substring(calendarUser.identifier, 0, 10)}</td>
-                        <td>${fn:substring(calendarUser.name, 0, 10)}</td>
+                        <td>${fn:substring(calendarUser.username, 0, 10)}</td>
                         <td>${fn:length(calendarUser.configurations)}</td>
+                        <td>${fn:length(calendarUser.authorities)}</td>
+                        <td>${fn:substring(calendarUser.password, 0, 10)}</td>
+                        <td>${fn:substring(calendarUser.accountNonExpired, 0, 10)}</td>
                         <td>
                             <spring:url value="/calendaruser/${calendarUser.id}" var="show_form_url"/>
                             <spring:url value="/static/images/show.png" var="show_image_url"/>
@@ -36,7 +42,7 @@
                     </tr>
                 </c:forEach>
                 <tr class="footer">
-                    <td colspan="7">
+                    <td colspan="10">
                         <span class="new">
                             <spring:url value="/calendaruser/form" var="create_url"/>
                             <a href="${create_url}">
