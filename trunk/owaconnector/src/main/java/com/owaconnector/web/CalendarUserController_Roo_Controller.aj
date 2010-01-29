@@ -53,4 +53,28 @@ privileged aspect CalendarUserController_Roo_Controller {
         return "calendaruser/list";        
     }    
     
+    @RequestMapping(value = "find/ByOauthTokenEquals/form", method = RequestMethod.GET)    
+    public String CalendarUserController.findCalendarUsersByOauthTokenEqualsForm(ModelMap modelMap) {    
+        return "calendaruser/findCalendarUsersByOauthTokenEquals";        
+    }    
+    
+    @RequestMapping(value = "find/ByOauthTokenEquals", method = RequestMethod.GET)    
+    public String CalendarUserController.findCalendarUsersByOauthTokenEquals(@RequestParam("oauthtoken") String oauthToken, ModelMap modelMap) {    
+        if (oauthToken == null || oauthToken.length() == 0) throw new IllegalArgumentException("A OauthToken is required.");        
+        modelMap.addAttribute("calendarusers", CalendarUser.findCalendarUsersByOauthTokenEquals(oauthToken).getResultList());        
+        return "calendaruser/list";        
+    }    
+    
+    @RequestMapping(value = "find/ByUsernameEquals/form", method = RequestMethod.GET)    
+    public String CalendarUserController.findCalendarUsersByUsernameEqualsForm(ModelMap modelMap) {    
+        return "calendaruser/findCalendarUsersByUsernameEquals";        
+    }    
+    
+    @RequestMapping(value = "find/ByUsernameEquals", method = RequestMethod.GET)    
+    public String CalendarUserController.findCalendarUsersByUsernameEquals(@RequestParam("username") String username, ModelMap modelMap) {    
+        if (username == null || username.length() == 0) throw new IllegalArgumentException("A Username is required.");        
+        modelMap.addAttribute("calendarusers", CalendarUser.findCalendarUsersByUsernameEquals(username).getResultList());        
+        return "calendaruser/list";        
+    }    
+    
 }
