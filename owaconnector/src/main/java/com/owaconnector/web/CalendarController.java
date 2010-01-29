@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.roo.addon.web.mvc.controller.RooWebScaffold;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +22,10 @@ import com.owaconnector.service.PasswordService;
 @Controller
 public class CalendarController {
 
-	private final static Logger LOG = Logger
-			.getLogger(CalendarController.class);
-
+	// logger
+	@com.owaconnector.logger.Logger
+	private Logger log;
+	
 	@Autowired
 	private PasswordService passwordService;
 	@Autowired
@@ -38,22 +38,22 @@ public class CalendarController {
 			throws NoCalendarFoundException {
 
 		try {
-			if (LOG.isDebugEnabled()) {
+			if (log.isDebugEnabled()) {
 				StringBuilder msg = new StringBuilder();
 				msg.append("getCalendar: ");
 				msg.append("session: " + token + " ");
 				msg.append("encryptionKey: " + encryptionKey);
-				LOG.debug(msg.toString());
+				log.debug(msg.toString());
 			}
 			CalendarConfiguration result = (CalendarConfiguration) CalendarConfiguration
 					.findCalendarConfigurationsByTokenEquals(token)
 					.getSingleResult();
-			if (LOG.isDebugEnabled()) {
+			if (log.isDebugEnabled()) {
 				StringBuilder msg = new StringBuilder();
 				msg.append("getCalendar: ");
 				msg.append("session: " + token + " ");
 				msg.append("result: " + result.toString());
-				LOG.debug(msg.toString());
+				log.debug(msg.toString());
 			}
 			PrivateKey privateKey;
 
@@ -63,39 +63,39 @@ public class CalendarController {
 			// byte[] decrypt = passwordService.decrypt(password.getBytes(),
 			// privateKey);
 			String decryptedPassword = password;// new String(decrypt);
-			if(LOG.isDebugEnabled()) {
+			if(log.isDebugEnabled()) {
 				StringBuilder msg = new StringBuilder();
 				msg.append("getCalendar: ");
 				msg.append("session: " + token + " ");
 				msg.append("Password decryption succesfull");
-				LOG.debug(msg.toString());
+				log.debug(msg.toString());
 			}
 
 			StringBuilder calendar = calendarService.getCalendar(result,
 					decryptedPassword);
 			if (calendar != null && calendar.length() > 0) {
-				if(LOG.isDebugEnabled()) {
+				if(log.isDebugEnabled()) {
 					StringBuilder msg = new StringBuilder();
 					msg.append("getCalendar: ");
 					msg.append("session: " + token + " ");
 					msg.append("Calendar obtained from Exchange");
-					LOG.debug(msg.toString());
+					log.debug(msg.toString());
 				}
 
 				modelMap.addAttribute("calendar", calendar);
 				return "calendar/get";
 			}
 		} catch (NoResultException e) {
-			if(LOG.isDebugEnabled()) {
+			if(log.isDebugEnabled()) {
 				StringBuilder msg = new StringBuilder();
 				msg.append("getCalendar: ");
 				msg.append("session: " + token + " ");
 				msg.append("CalendarConfiguration not found for token ");
-				LOG.warn(msg);
+				log.warn(msg);
 			}
 			throw new NoCalendarFoundException(e);
 		} catch (Exception e) {
-			LOG.error("getCalendar: ", e);
+			log.error("getCalendar: ", e);
 			throw new NoCalendarFoundException(e);
 		}
 		return null;
