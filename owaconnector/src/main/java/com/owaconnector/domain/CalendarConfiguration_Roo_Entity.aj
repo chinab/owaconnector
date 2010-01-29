@@ -1,5 +1,7 @@
 package com.owaconnector.domain;
 
+import java.lang.Integer;
+import java.lang.Long;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
@@ -7,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Version;
-
 import org.springframework.transaction.annotation.Transactional;
 
 privileged aspect CalendarConfiguration_Roo_Entity {
@@ -80,11 +81,5 @@ privileged aspect CalendarConfiguration_Roo_Entity {
     public static long CalendarConfiguration.countCalendarConfigurations() {    
         return (Long) entityManager().createQuery("select count(o) from CalendarConfiguration o").getSingleResult();        
     }    
-    
-       
-    
-       
-    
-       
     
 }
