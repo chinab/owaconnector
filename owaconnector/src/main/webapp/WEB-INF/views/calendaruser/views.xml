@@ -11,4 +11,10 @@
         <put-attribute name="body" value="/WEB-INF/views/calendaruser/create.jspx"/>
     </definition>
     
+<definition extends="default" name="calendaruser/findCalendarUsersByOauthTokenEquals">
+        <put-attribute name="body" value="/WEB-INF/views/calendaruser/findCalendarUsersByOauthTokenEquals.jspx"/>
+    </definition>
+<definition extends="default" name="calendaruser/findCalendarUsersByUsernameEquals">
+        <put-attribute name="body" value="/WEB-INF/views/calendaruser/findCalendarUsersByUsernameEquals.jspx"/>
+    </definition>
 </tiles-definitions>

@@ -21,7 +21,15 @@
                         <spring:message arguments="${label_calendarusers}" code="global.menu.list"/>
                     </a>
                 </li>
-            </ul>
+            
+                <li id="finder_findcalendarusersbyusernameequals_menu_item">
+                        <spring:url value="/calendaruser/find/ByUsernameEquals/form" var="finder_findcalendarusersbyusernameequals_menu_item_url"/>
+                        <a href="${finder_findcalendarusersbyusernameequals_menu_item_url}">
+                            <spring:message code="label.usernameequals" var="label_usernameequals"/>
+                            <spring:message arguments="${label_usernameequals}" code="global.menu.find"/>
+                        </a>
+                    </li>
+                </ul>
         </li>
         </sec:authorize>
         
