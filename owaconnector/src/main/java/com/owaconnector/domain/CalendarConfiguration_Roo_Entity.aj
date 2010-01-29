@@ -1,9 +1,5 @@
 package com.owaconnector.domain;
 
-import com.owaconnector.domain.CalendarConfiguration;
-import java.lang.Integer;
-import java.lang.Long;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
@@ -11,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Version;
+
 import org.springframework.transaction.annotation.Transactional;
 
 privileged aspect CalendarConfiguration_Roo_Entity {
@@ -84,17 +81,10 @@ privileged aspect CalendarConfiguration_Roo_Entity {
         return (Long) entityManager().createQuery("select count(o) from CalendarConfiguration o").getSingleResult();        
     }    
     
-    public static List<CalendarConfiguration> CalendarConfiguration.findAllCalendarConfigurations() {    
-        return entityManager().createQuery("select o from CalendarConfiguration o").getResultList();        
-    }    
+       
     
-    public static CalendarConfiguration CalendarConfiguration.findCalendarConfiguration(Long id) {    
-        if (id == null) throw new IllegalArgumentException("An identifier is required to retrieve an instance of CalendarConfiguration");        
-        return entityManager().find(CalendarConfiguration.class, id);        
-    }    
+       
     
-    public static List<CalendarConfiguration> CalendarConfiguration.findCalendarConfigurationEntries(int firstResult, int maxResults) {    
-        return entityManager().createQuery("select o from CalendarConfiguration o").setFirstResult(firstResult).setMaxResults(maxResults).getResultList();        
-    }    
+       
     
 }
