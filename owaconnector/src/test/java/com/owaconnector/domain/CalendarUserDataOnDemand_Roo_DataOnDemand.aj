@@ -18,8 +18,14 @@ privileged aspect CalendarUserDataOnDemand_Roo_DataOnDemand {
     
     public CalendarUser CalendarUserDataOnDemand.getNewTransientCalendarUser(int index) {    
         com.owaconnector.domain.CalendarUser obj = new com.owaconnector.domain.CalendarUser();        
+        obj.setAccountNonExpired(true);        
+        obj.setAccountNonLocked(true);        
+        obj.setCredentialsNonExpired(true);        
+        obj.setEnabled(true);        
         obj.setIdentifier("identifier_" + index);        
-        obj.setName("name_" + index);        
+        obj.setOauthToken("oauthToken_" + index);        
+        obj.setPassword("password_" + index);        
+        obj.setUsername("username_" + index);        
         return obj;        
     }    
     
