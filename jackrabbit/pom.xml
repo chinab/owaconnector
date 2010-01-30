@@ -3,7 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jackrabbit-webdav-httpclient4</groupId>
 	<artifactId>jackrabbit-webdav-httpclient4</artifactId>
+	<name>jackrabbit-webdav</name>
 	<version>0.0.1-SNAPSHOT</version>
+	<description>webdav component from apache jackrabbit project, based on httpclient4</description>
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
