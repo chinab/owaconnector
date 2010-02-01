@@ -57,5 +57,19 @@
             
             </ul>
         </li>
+    <li id="selenium_category">
+            <h2>
+                <spring:message code="menu.category.selenium_category.label"/>
+            </h2>
+            <ul>
+                <li id="selenium_test_suite_menu_item">
+                    <spring:url value="/static/selenium/test-suite.xhtml" var="selenium_test_suite_menu_item_url"/>
+                    <a href="${selenium_test_suite_menu_item_url}">
+                        <spring:message code="label.test" var="label_test"/>
+                        <spring:message arguments="${label_test}" code="selenium.menu.test.suite"/>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
 </div>
