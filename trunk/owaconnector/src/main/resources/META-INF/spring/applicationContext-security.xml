@@ -27,6 +27,7 @@
 		-->
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/static/**" access="permitAll" />
+		<intercept-url pattern="/calendar/**" access="permitAll" />
 		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
 
 		<openid-login user-service-ref="userServiceImpl">
@@ -45,6 +46,7 @@
 
 	<!-- Configure Authentication mechanism -->
 	<authentication-manager alias="authenticationManager" />
+	
 	<!-- token repository for remember me service -->
 	<beans:bean id="tokenRepo"
 		class="org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl" />
