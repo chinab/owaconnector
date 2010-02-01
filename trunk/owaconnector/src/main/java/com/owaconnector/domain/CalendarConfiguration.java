@@ -47,13 +47,15 @@ public class CalendarConfiguration {
 	private CalendarUser owner;
 
 	@SuppressWarnings("unchecked")
-	@PostFilter("filterObject.owner.username == principal")
+	// @PostFilter("hasPermission(filterObject,'read')")
+	@PostFilter("filterObject.owner.username == authentication.name")
 	public static List<CalendarConfiguration> findAllCalendarConfigurations() {
 		return entityManager().createQuery(
 				"select o from CalendarConfiguration o").getResultList();
 	}
 
-	@PostAuthorize("returnObject.owner.username == principal")
+	// @PostAuthorize("hasPermission(returnObject,'read')")
+	@PostAuthorize("returnObject.owner.username == authentication.name")
 	public static CalendarConfiguration findCalendarConfiguration(Long id) {
 		if (id == null)
 			throw new IllegalArgumentException(
@@ -62,7 +64,8 @@ public class CalendarConfiguration {
 	}
 
 	@SuppressWarnings("unchecked")
-	@PostFilter("filterObject.owner.username == principal")
+	// @PostFilter("hasPermission(filterObject,'read')")
+	@PostFilter("filterObject.owner.username == authentication.name")
 	public static List<CalendarConfiguration> findCalendarConfigurationEntries(
 			int firstResult, int maxResults) {
 		return entityManager().createQuery(
