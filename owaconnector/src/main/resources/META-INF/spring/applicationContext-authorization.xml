@@ -8,7 +8,8 @@
     	http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<bean id="annotationSecuredAspect"
-		class="com.owaconnector.security.AnnotationSecurityAspect" factory-method="aspectOf">
+		class="com.owaconnector.security.AnnotationSecurityAspect"
+		factory-method="aspectOf"> 
 		<property name="securityInterceptor" ref="aspectJSecurityInterceptor" />
 	</bean>
 
@@ -37,6 +38,7 @@
 					<constructor-arg ref="preInvocationAuthorizationAdvice" />
 				</bean>
 				<bean class="org.springframework.security.access.vote.RoleVoter" />
+				<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
 			</list>
 		</property>
 	</bean>
@@ -85,6 +87,10 @@
 	</bean>
 
 	<bean id="defaultMethodSecurityExpressionHandler"
-		class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler" />
+		class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler" >
+		<property name="permissionEvaluator" ref="calendarConfigurationPermissionEvaluator"/>
+		</bean>
+		
+		<bean id="calendarConfigurationPermissionEvaluator" class="com.owaconnector.security.CalendarConfigurationPermissionEvaluator" />
 
 </beans>
