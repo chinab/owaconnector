@@ -1,3 +1,2 @@
-<%@ page language="java" contentType="text/calendar; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-${calendar}
+<%@ page language="java" contentType="text/calendar; charset=UTF-8"
+    pageEncoding="UTF-8"%>${calendar}
