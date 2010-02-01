@@ -22,10 +22,13 @@ import com.owaconnector.service.PasswordService;
 @Controller
 public class CalendarController {
 
-	// logger
-	@com.owaconnector.logger.Logger
-	private Logger log;
-	
+	// // logger
+	// @com.owaconnector.logger.Logger
+	// private Logger log;
+
+	private final static Logger log = Logger
+			.getLogger(CalendarController.class);
+
 	@Autowired
 	private PasswordService passwordService;
 	@Autowired
@@ -63,7 +66,7 @@ public class CalendarController {
 			// byte[] decrypt = passwordService.decrypt(password.getBytes(),
 			// privateKey);
 			String decryptedPassword = password;// new String(decrypt);
-			if(log.isDebugEnabled()) {
+			if (log.isDebugEnabled()) {
 				StringBuilder msg = new StringBuilder();
 				msg.append("getCalendar: ");
 				msg.append("session: " + token + " ");
@@ -74,7 +77,7 @@ public class CalendarController {
 			StringBuilder calendar = calendarService.getCalendar(result,
 					decryptedPassword);
 			if (calendar != null && calendar.length() > 0) {
-				if(log.isDebugEnabled()) {
+				if (log.isDebugEnabled()) {
 					StringBuilder msg = new StringBuilder();
 					msg.append("getCalendar: ");
 					msg.append("session: " + token + " ");
@@ -84,9 +87,11 @@ public class CalendarController {
 
 				modelMap.addAttribute("calendar", calendar);
 				return "calendar/get";
+			} else {
+				return null;
 			}
 		} catch (NoResultException e) {
-			if(log.isDebugEnabled()) {
+			if (log.isDebugEnabled()) {
 				StringBuilder msg = new StringBuilder();
 				msg.append("getCalendar: ");
 				msg.append("session: " + token + " ");
@@ -96,8 +101,9 @@ public class CalendarController {
 			throw new NoCalendarFoundException(e);
 		} catch (Exception e) {
 			log.error("getCalendar: ", e);
+			e.printStackTrace();
 			throw new NoCalendarFoundException(e);
 		}
-		return null;
+		// return null;
 	}
 }
