@@ -4,23 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.Assert;
 
 import com.owaconnector.domain.CalendarConfiguration;
 import com.owaconnector.domain.CalendarUser;
+import com.owaconnector.util.AuthenticationUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/test-context.xml", "/test-datasource.xml" })
+@ContextConfiguration(locations = { "/test-context.xml" })
 public class SecurityTests {
 
 	// logger
@@ -32,21 +30,21 @@ public class SecurityTests {
 
 	@Before
 	public void setUp() {
-		Authentication token = new UsernamePasswordAuthenticationToken("user1",
-				"xxx", AuthorityUtils.createAuthorityList("ROLE_USER"));
-		SecurityContextHolder.getContext().setAuthentication(token);
-
+		AuthenticationUtil.createAuthentication("user1", "xxx", "ROLE_USER");
 		CalendarUser cu1 = new CalendarUser();
+		cu1.setId(new Long('1'));
 		cu1.setUsername("user1");
 		cu1.persist();
 		users.add(cu1);
 
 		CalendarUser cu2 = new CalendarUser();
+		cu2.setId(new Long('2'));
 		cu2.setUsername("user2");
 		cu2.persist();
 		users.add(cu2);
 
 		CalendarConfiguration cc1 = new CalendarConfiguration();
+		cc1.setId(new Long('1'));
 		cc1.setDomainName("domain");
 		cc1.setMaxDaysInPast(10);
 		cc1.setPasswordEncrypted("password");
@@ -56,6 +54,7 @@ public class SecurityTests {
 		configurations.add(cc1);
 
 		CalendarConfiguration cc2 = new CalendarConfiguration();
+		cc2.setId(new Long('2'));
 		cc2.setDomainName("domain");
 		cc2.setMaxDaysInPast(10);
 		cc2.setPasswordEncrypted("password");
@@ -63,81 +62,86 @@ public class SecurityTests {
 		cc2.setOwner(cu2);
 		cc2.persist();
 		configurations.add(cc2);
-
 		SecurityContextHolder.clearContext();
 
 	}
 
 	@After
 	public void tearDown() {
-		SecurityContextHolder.clearContext();
-		Authentication token = new UsernamePasswordAuthenticationToken("user1",
-				"xxx", AuthorityUtils.createAuthorityList("ROLE_USER"));
-		SecurityContextHolder.getContext().setAuthentication(token);
-
 		for (CalendarConfiguration config : configurations) {
 			configurations.remove(config);
 			config.remove();
 
 		}
+
 		for (CalendarUser user : users) {
+
 			users.remove(user);
 			user.remove();
 		}
-		SecurityContextHolder.clearContext();
 
 	}
 
-	// @Test(expected = AccessDeniedException.class)
-	// public void testSecuredClassWrongRole() throws Exception {
-	//
-	// Authentication token = new UsernamePasswordAuthenticationToken("test",
-	// "xxx", AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
-	// SecurityContextHolder.getContext().setAuthentication(token);
-	// CalendarConfiguration.findAllCalendarConfigurations();
-	//
-	// }
-
 	@Test
-	public void testSecuredClassRightRole() throws Exception {
-
-		Authentication token = new UsernamePasswordAuthenticationToken("user1",
-				"xxx", AuthorityUtils.createAuthorityList("ROLE_USER"));
-		SecurityContextHolder.getContext().setAuthentication(token);
+	public void testSecuredMethodPostFilterRightUser() throws Exception {
+		String username = "user1";
+		AuthenticationUtil.createAuthentication(username, "xxx", "ROLE_USER");
 		List<CalendarConfiguration> findAllCalendarConfigurations = CalendarConfiguration
 				.findAllCalendarConfigurations();
-		Assert.notNull(findAllCalendarConfigurations);
+		validateOwnerOfConfigurations(username, findAllCalendarConfigurations);
+		Assert.assertEquals(1, findAllCalendarConfigurations.size());
+
 	}
 
 	@Test
-	public void testSecuredClassPostFilter() throws Exception {
+	public void testSecuredMethodPostFilterRightUserEntries() throws Exception {
 
-		Authentication token = new UsernamePasswordAuthenticationToken("user1",
-				"xxx", AuthorityUtils.createAuthorityList("ROLE_USER"));
-		SecurityContextHolder.getContext().setAuthentication(token);
+		String username = "user1";
+		AuthenticationUtil.createAuthentication(username, "xxx", "ROLE_USER");
 		List<CalendarConfiguration> findAllCalendarConfigurations = CalendarConfiguration
-				.findAllCalendarConfigurations();
-		Assert.notNull(findAllCalendarConfigurations);
-		log
-				.debug("[testSecuredClassPostFilter] findAllCalendarConfigurations size: "
-						+ findAllCalendarConfigurations.size());
-		Assert.isTrue(findAllCalendarConfigurations.size() == 1,
-				"Expected 1 calendarconfiguration, actual: "
-						+ findAllCalendarConfigurations.size());
+				.findCalendarConfigurationEntries(0, 100);
+		validateOwnerOfConfigurations(username, findAllCalendarConfigurations);
+		Assert.assertEquals(1, findAllCalendarConfigurations.size());
 	}
 
 	@Test(expected = AccessDeniedException.class)
-	public void testSecuredClassPreAuthorize() throws Exception {
+	public void testSecuredMethodPostAuthorizeAccessDenied() throws Exception {
 
-		Authentication token = new UsernamePasswordAuthenticationToken("user1",
-				"xxx", AuthorityUtils.createAuthorityList("ROLE_USER"));
-		SecurityContextHolder.getContext().setAuthentication(token);
+		String username = "user1";
+		AuthenticationUtil.createAuthentication(username, "xxx", "ROLE_USER");
 		for (CalendarConfiguration configuration : configurations) {
+			log.debug("findCalendarConfiguration for: "
+					+ configuration.toString());
+			log.debug("Owner: " + configuration.getOwner().getUsername());
 			CalendarConfiguration.findCalendarConfiguration(configuration
 					.getId());
 
 		}
 
+	}
+
+	@Test
+	public void testSecuredMethodPostAuthorizeOwnObject() throws Exception {
+
+		String username = "user1";
+		AuthenticationUtil.createAuthentication(username, "xxx", "ROLE_USER");
+		List<CalendarConfiguration> findAllCalendarConfigurations = CalendarConfiguration
+				.findAllCalendarConfigurations();
+		validateOwnerOfConfigurations(username, findAllCalendarConfigurations);
+		for (CalendarConfiguration calendarConfiguration : findAllCalendarConfigurations) {
+			CalendarConfiguration
+					.findCalendarConfiguration(calendarConfiguration.getId());
+		}
+		Assert.assertEquals(1, findAllCalendarConfigurations.size());
+
+	}
+
+	private void validateOwnerOfConfigurations(String username,
+			List<CalendarConfiguration> findAllCalendarConfigurations) {
+		for (CalendarConfiguration calendarConfiguration : findAllCalendarConfigurations) {
+			CalendarUser owner = calendarConfiguration.getOwner();
+			Assert.assertEquals(owner.getUsername().toString(), username);
+		}
 	}
 
 }
