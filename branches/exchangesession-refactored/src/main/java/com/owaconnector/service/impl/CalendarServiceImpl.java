@@ -20,13 +20,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import com.owaconnector.domain.CalendarConfiguration;
+import com.owaconnector.exception.AuthenticationFailedException;
+import com.owaconnector.exception.DavMailException;
 import com.owaconnector.exception.NoCalendarFoundException;
+import com.owaconnector.exception.UnknownHttpStatusException;
+import com.owaconnector.exchange.ExchangeSession;
+import com.owaconnector.exchange.ExchangeSessionFactory;
+import com.owaconnector.exchange.original.Event;
 import com.owaconnector.service.CalendarService;
-
-import davmail.exception.DavMailException;
-import davmail.exchange.Event;
-import davmail.exchange.ExchangeSession;
-import davmail.exchange.ExchangeSessionFactory;
 
 @Service
 public class CalendarServiceImpl implements CalendarService {
@@ -34,8 +35,7 @@ public class CalendarServiceImpl implements CalendarService {
 	// @com.owaconnector.logger.Logger
 	// private org.apache.log4j.Logger log;
 	//	
-	private final static Logger log = Logger
-			.getLogger(CalendarServiceImpl.class);
+	private final static Logger log = Logger.getLogger(CalendarServiceImpl.class);
 
 	/*
 	 * (non-Javadoc)
@@ -44,8 +44,8 @@ public class CalendarServiceImpl implements CalendarService {
 	 * com.owaconnector.service.CalendarService#getCalendar(com.owaconnector
 	 * .domain.CalendarConfiguration, java.lang.String)
 	 */
-	public StringBuilder getCalendar(CalendarConfiguration config,
-			String decryptedPassword) throws NoCalendarFoundException {
+	public StringBuilder getCalendar(CalendarConfiguration config, String decryptedPassword)
+			throws NoCalendarFoundException {
 		Assert.notNull(config, "CalendarConfiguration cannot be null");
 		Assert.notNull(decryptedPassword, "DecryptedPassword cannot be null");
 
@@ -65,6 +65,12 @@ public class CalendarServiceImpl implements CalendarService {
 			throw new NoCalendarFoundException(e);
 		} catch (HttpException e) {
 			throw new NoCalendarFoundException(e);
+		} catch (AuthenticationFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnknownHttpStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return calendar;
 	}
@@ -81,17 +87,19 @@ public class CalendarServiceImpl implements CalendarService {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 * @throws HttpException
+	 * @throws UnknownHttpStatusException
+	 * @throws AuthenticationFailedException
 	 */
-	private List<Event> getEvents(CalendarConfiguration config,
-			String decryptedPassword) throws IOException, URISyntaxException,
-			HttpException {
+	private List<Event> getEvents(CalendarConfiguration config, String decryptedPassword)
+			throws IOException, URISyntaxException, HttpException, AuthenticationFailedException,
+			UnknownHttpStatusException {
 		Assert.notNull(config, "config cannot be null");
 		Assert.notNull(decryptedPassword, "decryptedPassword cannot be null");
 
 		String username = config.getDomainName() + "\\" + config.getUsername();
-		ExchangeSession session = ExchangeSessionFactory.getInstance(config
-				.getURL(), username, decryptedPassword);
-		String folderPath = session.getFolderPath("calendar");
+		ExchangeSession session = ExchangeSessionFactory.getInstance(config.getURL().toString(),
+				username, decryptedPassword);
+		String folderPath = session.getCalendarUrl();
 		return session.getAllEvents(folderPath, config.getMaxDaysInPast());
 	}
 
@@ -109,8 +117,7 @@ public class CalendarServiceImpl implements CalendarService {
 	 * @throws IOException
 	 * @throws HttpException
 	 */
-	private StringBuilder createCalendar(List<Event> events)
-			throws IOException, HttpException {
+	private StringBuilder createCalendar(List<Event> events) throws IOException, HttpException {
 
 		Assert.notNull(events, "Events cannot be null");
 
@@ -136,8 +143,8 @@ public class CalendarServiceImpl implements CalendarService {
 		return new StringBuilder(baos.toString("UTF-8"));
 	}
 
-	private Calendar merge(List<Event> events, CalendarBuilder builder)
-			throws IOException, HttpException {
+	private Calendar merge(List<Event> events, CalendarBuilder builder) throws IOException,
+			HttpException {
 		Calendar finalCalendar = new Calendar();
 		for (Event event : events) {
 			// first obtain the complete ics from the event
