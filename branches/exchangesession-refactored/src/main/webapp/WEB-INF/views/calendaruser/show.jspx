@@ -1,0 +1,64 @@
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <script type="text/javascript">dojo.require('dijit.TitlePane');</script>
+    <div id="_title_div">
+        <spring:message code="label.calendaruser" var="entity_label"/>
+        <spring:message arguments="${entity_label}" code="entity.show" var="title_msg"/>
+        <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
+        <c:if test="${not empty calendarUser}">
+            <div id="roo_calendarUser_identifier">
+                <label for="_identifier_id">Identifier:</label>
+                <div class="box" id="_identifier_id">${calendarUser.identifier}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarUser_username">
+                <label for="_username_id">Username:</label>
+                <div class="box" id="_username_id">${calendarUser.username}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarUser_configurations">
+                <label for="_configurations_id">Configurations:</label>
+                <div class="box" id="_configurations_id">${calendarUser.configurations}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarUser_authorities">
+                <label for="_authorities_id">Authorities:</label>
+                <div class="box" id="_authorities_id">${calendarUser.authorities}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarUser_password">
+                <label for="_password_id">Password:</label>
+                <div class="box" id="_password_id">${calendarUser.password}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarUser_accountNonExpired">
+                <label for="_accountNonExpired_id">Account Non Expired:</label>
+                <div class="box" id="_accountNonExpired_id">${calendarUser.accountNonExpired}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarUser_accountNonLocked">
+                <label for="_accountNonLocked_id">Account Non Locked:</label>
+                <div class="box" id="_accountNonLocked_id">${calendarUser.accountNonLocked}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarUser_credentialsNonExpired">
+                <label for="_credentialsNonExpired_id">Credentials Non Expired:</label>
+                <div class="box" id="_credentialsNonExpired_id">${calendarUser.credentialsNonExpired}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarUser_enabled">
+                <label for="_enabled_id">Enabled:</label>
+                <div class="box" id="_enabled_id">${calendarUser.enabled}</div>
+            </div>
+            <br/>
+            <div id="roo_calendarUser_oauthToken">
+                <label for="_oauthToken_id">Oauth Token:</label>
+                <div class="box" id="_oauthToken_id">${calendarUser.oauthToken}</div>
+            </div>
+            <br/>
+        </c:if>
+        <c:if test="${empty calendarUser}">
+            <spring:message arguments="${entity_label}" code="entity.not.found.single"/>
+        </c:if>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:sec="http://www.springframework.org/security/tags" xmlns:spring="http://www.springframework.org/tags" id="menu" version="2.0">
+	<jsp:output omit-xml-declaration="yes"/>
+	<ul id="roo_menu">
+	<sec:authorize ifAllGranted="ROLE_ADMIN">		
+	<li id="web_mvc_jsp_calendaruser_category">
+            <h2>
+                <spring:message code="menu.category.web_mvc_jsp_calendaruser_category.label"/>
+            </h2>
+            <ul>
+                <li id="web_mvc_jsp_create_calendaruser_menu_item">
+                    <spring:url value="/calendaruser/form" var="web_mvc_jsp_create_calendaruser_menu_item_url"/>
+                    <a href="${web_mvc_jsp_create_calendaruser_menu_item_url}">
+                        <spring:message code="label.calendaruser" var="label_calendaruser"/>
+                        <spring:message arguments="${label_calendaruser}" code="global.menu.new"/>
+                    </a>
+                </li>
+            <li id="web_mvc_jsp_list_calendaruser_menu_item">
+                    <spring:url value="/calendaruser?page=${empty param.page ? 1 : param.page}&amp;amp;size=${empty param.size ? 10 : param.size}" var="web_mvc_jsp_list_calendaruser_menu_item_url"/>
+                    <a href="${web_mvc_jsp_list_calendaruser_menu_item_url}">
+                        <spring:message code="label.calendarusers" var="label_calendarusers"/>
+                        <spring:message arguments="${label_calendarusers}" code="global.menu.list"/>
+                    </a>
+                </li>
+            
+                <li id="finder_findcalendarusersbyusernameequals_menu_item">
+                        <spring:url value="/calendaruser/find/ByUsernameEquals/form" var="finder_findcalendarusersbyusernameequals_menu_item_url"/>
+                        <a href="${finder_findcalendarusersbyusernameequals_menu_item_url}">
+                            <spring:message code="label.usernameequals" var="label_usernameequals"/>
+                            <spring:message arguments="${label_usernameequals}" code="global.menu.find"/>
+                        </a>
+                    </li>
+                </ul>
+        </li>
+        </sec:authorize>
+        
+    <li id="web_mvc_jsp_calendarconfiguration_category">
+            <h2>
+                <spring:message code="menu.category.web_mvc_jsp_calendarconfiguration_category.label"/>
+            </h2>
+            <ul>
+                <li id="web_mvc_jsp_create_calendarconfiguration_menu_item">
+                    <spring:url value="/calendarconfiguration/form" var="web_mvc_jsp_create_calendarconfiguration_menu_item_url"/>
+                    <a href="${web_mvc_jsp_create_calendarconfiguration_menu_item_url}">
+                        <spring:message code="label.calendarconfiguration" var="label_calendarconfiguration"/>
+                        <spring:message arguments="${label_calendarconfiguration}" code="global.menu.new"/>
+                    </a>
+                </li>
+            <li id="web_mvc_jsp_list_calendarconfiguration_menu_item">
+                    <spring:url value="/calendarconfiguration?page=${empty param.page ? 1 : param.page}&amp;amp;size=${empty param.size ? 10 : param.size}" var="web_mvc_jsp_list_calendarconfiguration_menu_item_url"/>
+                    <a href="${web_mvc_jsp_list_calendarconfiguration_menu_item_url}">
+                        <spring:message code="label.calendarconfigurations" var="label_calendarconfigurations"/>
+                        <spring:message arguments="${label_calendarconfigurations}" code="global.menu.list"/>
+                    </a>
+                </li>
+            
+            
+            
+            </ul>
+        </li>
+    <li id="selenium_category">
+            <h2>
+                <spring:message code="menu.category.selenium_category.label"/>
+            </h2>
+            <ul>
+                <li id="selenium_test_suite_menu_item">
+                    <spring:url value="/static/selenium/test-suite.xhtml" var="selenium_test_suite_menu_item_url"/>
+                    <a href="${selenium_test_suite_menu_item_url}">
+                        <spring:message code="label.test" var="label_test"/>
+                        <spring:message arguments="${label_test}" code="selenium.menu.test.suite"/>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

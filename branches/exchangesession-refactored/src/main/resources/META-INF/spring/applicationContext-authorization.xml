@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util
+    	http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="annotationSecuredAspect"
+		class="com.owaconnector.security.AnnotationSecurityAspect"
+		factory-method="aspectOf"> 
+		<property name="securityInterceptor" ref="aspectJSecurityInterceptor" />
+	</bean>
+
+	<bean id="aspectJSecurityInterceptor"
+		class="org.springframework.security.access.intercept.aspectj.AspectJSecurityInterceptor">
+		<property name="authenticationManager" ref="aJAuthenticationManager" />
+		<property name="accessDecisionManager" ref="accessDecisionManager" />
+		<property name="securityMetadataSource" ref="delegatingMethodSecurityMetadataSource" />
+		<property name="afterInvocationManager" ref="postInvocationManager" />
+	</bean>
+
+	<bean id="aJAuthenticationManager"
+		class="org.springframework.security.authentication.ProviderManager">
+		<property name="providers">
+			<bean
+				class="org.springframework.security.authentication.TestingAuthenticationProvider" />
+		</property>
+	</bean>
+
+	<bean id="accessDecisionManager"
+		class="org.springframework.security.access.vote.AffirmativeBased">
+		<property name="decisionVoters">
+			<list>
+				<bean
+					class="org.springframework.security.access.prepost.AJPreInvocationAuthorizationAdviceVoter">
+					<constructor-arg ref="preInvocationAuthorizationAdvice" />
+				</bean>
+				<bean class="org.springframework.security.access.vote.RoleVoter" />
+				<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="delegatingMethodSecurityMetadataSource"
+		class="org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource">
+		<property name="methodSecurityMetadataSources">
+			<list>
+				<bean
+					class="org.springframework.security.access.annotation.SecuredAnnotationSecurityMetadataSource" />
+				<bean
+					class="org.springframework.security.access.prepost.PrePostAnnotationSecurityMetadataSource">
+					<constructor-arg ref="expressionBasedAnnotationAttributeFactory" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="expressionBasedAnnotationAttributeFactory"
+		class="org.springframework.security.access.expression.method.ExpressionBasedAnnotationAttributeFactory">
+		<constructor-arg ref="defaultMethodSecurityExpressionHandler" />
+	</bean>
+
+	<bean id="preInvocationAuthorizationAdvice"
+		class="org.springframework.security.access.expression.method.ExpressionBasedPreInvocationAdvice">
+
+	</bean>
+
+	<bean id="postInvocationManager"
+		class="org.springframework.security.access.intercept.AfterInvocationProviderManager">
+		<property name="providers">
+			<list>
+				<ref bean="postInvocationProvider" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="postInvocationProvider"
+		class="org.springframework.security.access.prepost.AJPostInvocationAdviceProvider">
+		<constructor-arg ref="postAdvice" />
+	</bean>
+
+	<bean id="postAdvice"
+		class="org.springframework.security.access.expression.method.ExpressionBasedPostInvocationAdvice">
+		<constructor-arg ref="defaultMethodSecurityExpressionHandler" />
+	</bean>
+
+	<bean id="defaultMethodSecurityExpressionHandler"
+		class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler" >
+		<property name="permissionEvaluator" ref="calendarConfigurationPermissionEvaluator"/>
+		</bean>
+		
+		<bean id="calendarConfigurationPermissionEvaluator" class="com.owaconnector.security.CalendarConfigurationPermissionEvaluator" />
+
+</beans>

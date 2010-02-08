@@ -1,0 +1,96 @@
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:output omit-xml-declaration="yes"/>
+    <script type="text/javascript">dojo.require('dijit.TitlePane');dojo.require('dijit.form.FilteringSelect');</script>
+    <div id="_title_div">
+        <spring:message code="label.calendarconfiguration" var="entity_label"/>
+        <spring:message arguments="${entity_label}" code="entity.update" var="title_msg"/>
+        <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
+        <spring:url value="/calendarconfiguration/${calendarConfiguration.id}" var="form_url"/>
+        <form:form action="${form_url}" method="PUT" modelAttribute="calendarConfiguration">
+            <form:errors cssClass="errors" delimiter="&lt;p/&gt;"/>
+            <div id="roo_calendarConfiguration_username">
+                <label for="_username_id">Username:</label>
+                <form:input cssStyle="width:250px" id="_username_id" maxlength="30" path="username" size="0"/>
+                <br/>
+                <form:errors cssClass="errors" id="_username_error_id" path="username"/>
+                <spring:message arguments="Username" code="field.invalid" var="field_invalid"/>
+                <spring:message code="field.required" var="field_required"/>
+                <spring:message argumentSeparator="," arguments="Username,(${field_required})" code="field.simple.validation" var="field_validation"/>
+                <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_username_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${field_validation}', invalidMessage: '${field_invalid}', required : true}})); </script>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_domainName">
+                <label for="_domainName_id">Domain Name:</label>
+                <form:input cssStyle="width:250px" id="_domainName_id" maxlength="30" path="domainName" size="0"/>
+                <br/>
+                <form:errors cssClass="errors" id="_domainName_error_id" path="domainName"/>
+                <spring:message arguments="Domain Name" code="field.invalid" var="field_invalid"/>
+                <spring:message code="field.required" var="field_required"/>
+                <spring:message argumentSeparator="," arguments="Domain Name,(${field_required})" code="field.simple.validation" var="field_validation"/>
+                <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_domainName_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${field_validation}', invalidMessage: '${field_invalid}', required : true}})); </script>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_passwordEncrypted">
+                <label for="_passwordEncrypted_id">Password Encrypted:</label>
+                <form:input cssStyle="width:250px" id="_passwordEncrypted_id" maxlength="30" path="passwordEncrypted" size="0"/>
+                <br/>
+                <form:errors cssClass="errors" id="_passwordEncrypted_error_id" path="passwordEncrypted"/>
+                <spring:message arguments="Password Encrypted" code="field.invalid" var="field_invalid"/>
+                <spring:message code="field.required" var="field_required"/>
+                <spring:message argumentSeparator="," arguments="Password Encrypted,(${field_required})" code="field.simple.validation" var="field_validation"/>
+                <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_passwordEncrypted_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${field_validation}', invalidMessage: '${field_invalid}', required : true}})); </script>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_uRL">
+                <label for="_URL_id">U R L:</label>
+                <form:input cssStyle="width:250px" id="_URL_id" maxlength="30" path="URL" size="0"/>
+                <br/>
+                <form:errors cssClass="errors" id="_URL_error_id" path="URL"/>
+                <spring:message arguments="U R L" code="field.invalid" var="field_invalid"/>
+                <spring:message code="field.required" var="field_required"/>
+                <spring:message argumentSeparator="," arguments="U R L,(${field_required})" code="field.simple.validation" var="field_validation"/>
+                <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_URL_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${field_validation}', invalidMessage: '${field_invalid}', required : true}})); </script>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_maxDaysInPast">
+                <label for="_maxDaysInPast_id">Max Days In Past:</label>
+                <form:input cssStyle="width:250px" id="_maxDaysInPast_id" maxlength="30" path="maxDaysInPast" size="0"/>
+                <br/>
+                <form:errors cssClass="errors" id="_maxDaysInPast_error_id" path="maxDaysInPast"/>
+                <spring:message code="field.invalid.integer" var="field_invalid"/>
+                <spring:message code="field.required" var="field_required"/>
+                <spring:message argumentSeparator="," arguments="Max Days In Past,(${field_required})" code="field.simple.validation" var="field_validation"/>
+                <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_maxDaysInPast_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${field_validation}', invalidMessage: '${field_invalid}', regExp: '-?[0-9]*', required : true}})); </script>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_token">
+                <label for="_token_id">Token:</label>
+                <form:input cssStyle="width:250px" id="_token_id" maxlength="30" path="token" size="0"/>
+                <br/>
+                <form:errors cssClass="errors" id="_token_error_id" path="token"/>
+                <spring:message arguments="Token" code="field.invalid" var="field_invalid"/>
+                <spring:message code="field.required" var="field_required"/>
+                <spring:message argumentSeparator="," arguments="Token," code="field.simple.validation" var="field_validation"/>
+                <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_token_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${field_validation}', invalidMessage: '${field_invalid}', required : false}})); </script>
+            </div>
+            <br/>
+            <div id="roo_calendarConfiguration_owner">
+                <c:if test="${not empty calendarusers}">
+                    <label for="_owner_id">Owner:</label>
+                    <form:select cssStyle="width:250px" id="_owner_id" path="owner">
+                        <form:options itemValue="id" items="${calendarusers}"/>
+                    </form:select>
+                    <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_owner_id', widgetType: 'dijit.form.FilteringSelect', widgetAttrs : {hasDownArrow : true}})); </script>
+                </c:if>
+            </div>
+            <br/>
+            <div class="submit" id="roo_calendarConfiguration_submit">
+                <spring:message code="button.update" var="update_button"/>
+                <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
+                <input id="proceed" type="submit" value="${update_button}"/>
+            </div>
+            <form:hidden id="_id_id" path="id"/>
+            <form:hidden id="_version_id" path="version"/>
+        </form:form>
+    </div>
+</div>
