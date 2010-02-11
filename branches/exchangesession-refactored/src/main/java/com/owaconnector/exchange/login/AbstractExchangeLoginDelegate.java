@@ -1,16 +1,13 @@
-package com.owaconnector.exchange;
+package com.owaconnector.exchange.login;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import org.apache.http.HttpException;
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
@@ -20,23 +17,30 @@ import org.mortbay.util.URIUtil;
 
 import com.owaconnector.exception.DavMailAuthenticationException;
 import com.owaconnector.exception.DavMailException;
+import com.owaconnector.exchange.ClientFacade;
+import com.owaconnector.exchange.ExchangeNamespace;
+import com.owaconnector.exchange.ExchangeProperties;
+import com.owaconnector.exchange.util.DavPropertyUtil;
+import com.owaconnector.exchange.util.StringUtil;
 
 public abstract class AbstractExchangeLoginDelegate implements ExchangeLoginDelegate {
 
 	private static final Logger LOGGER = Logger.getLogger(AbstractExchangeLoginDelegate.class);
 
-	private final HttpClientFacade facade;
-
 	private String username;
 	private String password;
+	private ClientFacade facade;
+	private ExchangeProperties props;
 
-	public AbstractExchangeLoginDelegate(HttpClientFacade facade, String username, String password) {
-		this.facade = facade;
+	public AbstractExchangeLoginDelegate(ClientFacade facade, ExchangeProperties props,
+			String username, String password) {
 		this.username = username;
 		this.password = password;
+		this.facade = facade;
+		this.props = props;
 	}
 
-	protected HttpClientFacade getFacade() {
+	protected ClientFacade getFacade() {
 		return facade;
 	}
 
@@ -88,7 +92,7 @@ public abstract class AbstractExchangeLoginDelegate implements ExchangeLoginDele
 	public ExchangeProperties getWellKnownFolders(InputStream inboxPage) throws HttpException,
 			URISyntaxException, IOException {
 		String mailPath = getMailPath(inboxPage);
-		ExchangeProperties props = new ExchangeProperties();
+
 		// Retrieve well known URLs
 		MultiStatusResponse[] responses = null;
 		try {
@@ -124,59 +128,6 @@ public abstract class AbstractExchangeLoginDelegate implements ExchangeLoginDele
 		else {
 			throw new IllegalStateException("ExchangeProperties invalid");
 		}
-	}
-
-	// FIXME REWRITE
-
-	private String getMailPath(HttpUriRequest method, HttpResponse response) throws HttpException {
-		// find base url
-		String line;
-		String mailPath = null;
-		// get user mail URL from html body (multi frame)
-		BufferedReader mainPageReader = null;
-		try {
-			mainPageReader = new BufferedReader(new InputStreamReader(response.getEntity()
-					.getContent()));
-			// noinspection StatementWithEmptyBody
-			while ((line = mainPageReader.readLine()) != null
-					&& line.toLowerCase().indexOf(BASE_HREF) == -1) {
-			}
-			if (line != null) {
-				int start = line.toLowerCase().indexOf(BASE_HREF) + BASE_HREF.length();
-				int end = line.indexOf('\"', start);
-				String mailBoxBaseHref = line.substring(start, end);
-				URL baseURL = new URL(mailBoxBaseHref);
-				mailPath = baseURL.getPath();
-				LOGGER.debug("Base href found in body, mailPath is " + mailPath);
-				// buildEmail(baseURL.getHost(), baseURL.getPath());
-				// LOGGER.debug("Current user email is " + email);
-			} else {
-				// failover for Exchange 2007 : build standard mailbox link with
-				// email
-				// FIXME
-				// buildEmail(method.getURI().getHost(),
-				// method.getURI().getPath());
-				// setMailPath("/exchange/" + email + '/');
-				// LOGGER.debug("Current user email is " + email +
-				// ", mailPath is " + getMailPath());
-			}
-		} catch (IOException e) {
-			LOGGER.error("Error parsing main page at " + method.getURI().getPath(), e);
-		} finally {
-			if (mainPageReader != null) {
-				try {
-					mainPageReader.close();
-				} catch (IOException e) {
-					LOGGER.error("Error parsing main page at " + method.getURI().getPath());
-				}
-			}
-		}
-
-		if (mailPath == null) {
-			throw new DavMailAuthenticationException(
-					"EXCEPTION_AUTHENTICATION_FAILED_PASSWORD_EXPIRED");
-		}
-		return mailPath;
 	}
 
 }

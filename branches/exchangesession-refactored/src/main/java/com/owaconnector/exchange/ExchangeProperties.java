@@ -1,12 +1,32 @@
 package com.owaconnector.exchange;
 
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.util.StringUtils;
 
+@Configuration
 public class ExchangeProperties {
+
+	@Bean
+	@Scope(value = BeanDefinition.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
+	public ExchangeProperties exchangeProperties() {
+		return new ExchangeProperties();
+	}
 
 	private String mailPath;
 	private String email;
 	private String alias;
+
+	private String inboxUrl;
+	private String deleteditemsUrl;
+	private String sentitemsUrl;
+	private String sendmsgUrl;
+	private String draftsUrl;
+	private String calendarUrl;
+	private String contactsUrl;
 
 	public String getMailPath() {
 		return mailPath;
@@ -88,14 +108,6 @@ public class ExchangeProperties {
 		this.contactsUrl = contactsUrl;
 	}
 
-	// public void setBasePath(String basePath) {
-	// this.basePath = basePath;
-	// }
-	//
-	// public String getBasePath() {
-	// return basePath;
-	// }
-
 	public String toString() {
 
 		return "ExchangeProperties [Inbox URL : " + this.getInboxUrl() + " Trash URL : "
@@ -104,21 +116,10 @@ public class ExchangeProperties {
 				+ this.getCalendarUrl() + " Contacts URL : " + this.getContactsUrl() + " ]";
 	}
 
-	private String inboxUrl;
-	private String deleteditemsUrl;
-	private String sentitemsUrl;
-	private String sendmsgUrl;
-	private String draftsUrl;
-	private String calendarUrl;
-	private String contactsUrl;
-
-	// private String basePath;
-
 	public boolean validate() {
 		return StringUtils.hasText(inboxUrl) && StringUtils.hasText(deleteditemsUrl)
 				&& StringUtils.hasText(deleteditemsUrl) && StringUtils.hasText(sentitemsUrl)
 				&& StringUtils.hasText(sendmsgUrl) && StringUtils.hasText(draftsUrl)
 				&& StringUtils.hasText(calendarUrl) && StringUtils.hasText(contactsUrl);
-		// && StringUtils.hasText(basePath)
 	}
 }

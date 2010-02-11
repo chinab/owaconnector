@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
@@ -17,6 +18,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -30,11 +32,17 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
+import org.apache.jackrabbit.webdav.client.methods.SearchMethod;
+import org.apache.jackrabbit.webdav.client.methods.response.MultiStatusResponseHandler;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
+import org.apache.jackrabbit.webdav.xml.Namespace;
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
+
+import com.owaconnector.exchange.util.DavResponseUtil;
 
 public class HttpClientFacade implements ClientFacade {
 
@@ -93,7 +101,7 @@ public class HttpClientFacade implements ClientFacade {
 	 *            the request to execute.
 	 * @return response obtained from the request.
 	 */
-	private HttpResponse execute(HttpRequestBase request) {
+	private HttpResponse execute(HttpUriRequest request) {
 		HttpResponse response = null;
 		try {
 			response = this.httpClient.execute(request);
@@ -219,5 +227,61 @@ public class HttpClientFacade implements ClientFacade {
 		if (credsProvider != null) {
 			credsProvider.clear();
 		}
+	}
+
+	@Override
+	public MultiStatusResponse[] executeSearchMethod(String encodePath, String searchQuery) {
+
+		MultiStatusResponseHandler handler = new MultiStatusResponseHandler() {
+
+			@Override
+			protected void processMultiStatusBody(MultiStatus multiStatus) {
+				// do nothing
+			}
+		};
+		Namespace languageNamespace = Namespace.getNamespace("D", "DAV:");
+		try {
+			SearchMethod searchMethod = new SearchMethod(encodePath, searchQuery, "sql",
+					languageNamespace);
+			MultiStatus response = execute(searchMethod, handler);
+			return response.getResponses();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private MultiStatus execute(HttpUriRequest request, MultiStatusResponseHandler responseHandler) {
+		try {
+			return this.httpClient.execute(request, responseHandler);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public InputStream executeGet(String url, boolean redirecting, List<Header> headers)
+			throws IOException {
+		Assert.notNull(url, "URL is required");
+		Assert.notNull(redirecting, "redirecting is required");
+
+		LOG.debug("[executeGet] URL: " + url + " Redirecting: " + redirecting);
+
+		HttpRequestBase currentMethod = new HttpGet(url);
+		if (headers != null && !headers.isEmpty()) {
+			for (Header header : headers) {
+				LOG.debug("[executeGet] Header: " + header.getName() + " value: "
+						+ header.getValue());
+				currentMethod.addHeader(header);
+			}
+		}
+		HttpClientParams.setRedirecting(currentMethod.getParams(), redirecting);
+		HttpResponse response = execute(currentMethod);
+		return response.getEntity().getContent();
 	}
 }

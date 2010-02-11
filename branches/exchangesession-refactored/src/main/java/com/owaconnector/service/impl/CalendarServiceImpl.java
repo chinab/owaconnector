@@ -16,6 +16,7 @@ import net.fortuna.ical4j.util.Calendars;
 
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -24,9 +25,10 @@ import com.owaconnector.exception.AuthenticationFailedException;
 import com.owaconnector.exception.DavMailException;
 import com.owaconnector.exception.NoCalendarFoundException;
 import com.owaconnector.exception.UnknownHttpStatusException;
+import com.owaconnector.exchange.ExchangeProperties;
 import com.owaconnector.exchange.ExchangeSession;
 import com.owaconnector.exchange.ExchangeSessionFactory;
-import com.owaconnector.exchange.original.Event;
+import com.owaconnector.exchange.entity.Event;
 import com.owaconnector.service.CalendarService;
 
 @Service
@@ -36,6 +38,14 @@ public class CalendarServiceImpl implements CalendarService {
 	// private org.apache.log4j.Logger log;
 	//	
 	private final static Logger log = Logger.getLogger(CalendarServiceImpl.class);
+
+	@Autowired
+	private ExchangeSessionFactory factory;
+
+	private ExchangeSession session;
+
+	@Autowired
+	private ExchangeProperties properties;
 
 	/*
 	 * (non-Javadoc)
@@ -51,7 +61,10 @@ public class CalendarServiceImpl implements CalendarService {
 
 		StringBuilder calendar = null;
 		try {
-			List<Event> events = getEvents(config, decryptedPassword);
+			String username = config.getDomainName() + "\\" + config.getUsername();
+			this.session = factory.getInstance(config.getURL().toString(), username,
+					decryptedPassword);
+			List<Event> events = getEvents(config.getMaxDaysInPast());
 			if (events != null && events.size() > 0) {
 				calendar = createCalendar(events);
 			}
@@ -79,6 +92,8 @@ public class CalendarServiceImpl implements CalendarService {
 	 * Get all events for a specific CalendarConfiguration with supplied
 	 * password.
 	 * 
+	 * @param maxDaysInpast
+	 * 
 	 * @param config
 	 *            The CalendarConfiguration to access the calendar.
 	 * @param decryptedPassword
@@ -90,17 +105,10 @@ public class CalendarServiceImpl implements CalendarService {
 	 * @throws UnknownHttpStatusException
 	 * @throws AuthenticationFailedException
 	 */
-	private List<Event> getEvents(CalendarConfiguration config, String decryptedPassword)
-			throws IOException, URISyntaxException, HttpException, AuthenticationFailedException,
-			UnknownHttpStatusException {
-		Assert.notNull(config, "config cannot be null");
-		Assert.notNull(decryptedPassword, "decryptedPassword cannot be null");
-
-		String username = config.getDomainName() + "\\" + config.getUsername();
-		ExchangeSession session = ExchangeSessionFactory.getInstance(config.getURL().toString(),
-				username, decryptedPassword);
-		String folderPath = session.getCalendarUrl();
-		return session.getAllEvents(folderPath, config.getMaxDaysInPast());
+	private List<Event> getEvents(int maxDaysInpast) throws IOException, URISyntaxException,
+			HttpException, AuthenticationFailedException, UnknownHttpStatusException {
+		String calendarUrl = properties.getCalendarUrl();
+		return session.getAllEvents(calendarUrl, maxDaysInpast);
 	}
 
 	/**
@@ -148,7 +156,7 @@ public class CalendarServiceImpl implements CalendarService {
 		Calendar finalCalendar = new Calendar();
 		for (Event event : events) {
 			// first obtain the complete ics from the event
-			String ics = event.getICS();
+			String ics = this.session.getEvent(event);
 			try {
 				Calendar calendar = builder.build(new StringReader(ics));
 				finalCalendar = Calendars.merge(finalCalendar, calendar);
