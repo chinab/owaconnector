@@ -29,6 +29,10 @@ import java.util.ResourceBundle;
  */
 public class BundleMessage implements Serializable {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * Root locale to get english messages for logging.
 	 */
 	public static final Locale ROOT_LOCALE = new Locale("", "");
@@ -230,5 +234,10 @@ public class BundleMessage implements Serializable {
 	 * Typed bundle message collection
 	 */
 	public static class BundleMessageList extends ArrayList<BundleMessage> {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 	}
 }

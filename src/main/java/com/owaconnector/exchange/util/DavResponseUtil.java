@@ -1,4 +1,4 @@
-package com.owaconnector.exchange;
+package com.owaconnector.exchange.util;
 
 import java.io.IOException;
 import java.io.InputStream;

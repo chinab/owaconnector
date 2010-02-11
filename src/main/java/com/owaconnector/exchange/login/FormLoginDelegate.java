@@ -1,4 +1,4 @@
-package com.owaconnector.exchange;
+package com.owaconnector.exchange.login;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +21,9 @@ import org.springframework.util.StringUtils;
 
 import com.owaconnector.exception.AuthenticationFailedException;
 import com.owaconnector.exception.UnknownHttpStatusException;
+import com.owaconnector.exchange.ClientFacade;
+import com.owaconnector.exchange.ExchangeProperties;
+import com.owaconnector.exchange.util.StringUtil;
 
 public class FormLoginDelegate extends AbstractExchangeLoginDelegate {
 
@@ -59,8 +62,9 @@ public class FormLoginDelegate extends AbstractExchangeLoginDelegate {
 	 */
 	private String passwordInput = "password";
 
-	public FormLoginDelegate(HttpClientFacade facade, String username, String password) {
-		super(facade, username, password);
+	public FormLoginDelegate(ClientFacade facade, ExchangeProperties props, String username,
+			String password) {
+		super(facade, props, username, password);
 
 	}
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
@@ -41,6 +42,19 @@ public interface ClientFacade {
 	public abstract InputStream executeGet(String url, boolean redirecting) throws IOException;
 
 	/**
+	 * Execute a GET request.
+	 * 
+	 * @param url
+	 *            URL of the GET request
+	 * @param redirecting
+	 *            boolean indicating if the client should follow redirects
+	 * @return InputStream Content of the final page.
+	 * @throws IOException
+	 */
+	public abstract InputStream executeGet(String url, boolean redirecting, List<Header> headers)
+			throws IOException;
+
+	/**
 	 * Execute a POST request.
 	 * 
 	 * @param url
@@ -66,5 +80,9 @@ public interface ClientFacade {
 	 */
 	public abstract MultiStatusResponse[] executePropFindMethod(String path, int depth,
 			DavPropertyNameSet properties) throws IOException;
+
+	public abstract MultiStatusResponse[] executeSearchMethod(String encodePath, String searchQuery);
+
+	public abstract void setAuthentication(String username, String password);
 
 }

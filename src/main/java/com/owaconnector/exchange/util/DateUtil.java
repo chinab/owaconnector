@@ -1,4 +1,4 @@
-package com.owaconnector.exchange.original;
+package com.owaconnector.exchange.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
